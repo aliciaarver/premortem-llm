@@ -31,6 +31,46 @@ otherwise writes free text to Trello; card state changes (list moves, new
 cards) are the only writes, and creating a card always requires per-item
 approval.
 
+## Installing the skills
+
+The canonical source is this repo (`skills/<name>/SKILL.md`). Each agent looks
+for skills in its own location — symlink rather than copy, so edits here stay
+in sync everywhere:
+
+**Claude Code**
+
+```
+mkdir -p ~/.claude/skills
+for d in skills/*/; do ln -s "$PWD/$d" ~/.claude/skills/"$(basename "$d")"; done
+```
+
+Personal, available in any project. For a single project only, symlink into
+that project's `.claude/skills/` instead of `~/.claude/skills/`.
+
+**Grok**
+
+Same idea, different root — Grok reads from `~/.grok/skills/<name>/SKILL.md`:
+
+```
+mkdir -p ~/.grok/skills
+for d in skills/*/; do ln -s "$PWD/$d" ~/.grok/skills/"$(basename "$d")"; done
+```
+
+**Cursor**
+
+Cursor doesn't use the same `SKILL.md` + frontmatter format or a `~/.cursor/skills`
+directory — it works off project-level rule files (`.cursor/rules/*.mdc`) and,
+in newer versions, `.cursor/commands/*.md` for slash-commands. There's no
+single command that "installs" a skill; per project, either:
+
+- copy a `SKILL.md`'s body into `.cursor/commands/<name>.md` (drop the
+  `argument-hint`/`metadata` frontmatter, Cursor doesn't read it), or
+- fold the rules into `.cursor/rules/<name>.mdc` if you want it always-on
+  rather than invoked by name.
+
+Check Cursor's current docs before relying on this — the commands/rules split
+has changed across versions.
+
 ## Setup
 
 Each Trello-touching skill needs a `.env` (or shell env) with:
