@@ -23,10 +23,10 @@ no matter how much a message sounds like an architectural decision.
 ## Scope
 
 Challenge a **proposed** decision or fix path: surface assumptions, failure modes,
-mitigations, spikes, and task skeletons for next steps. Skip this skill (proceed
-normally instead) for: straight implementation requests, code review of existing
-diffs (→ `/code-review`), design doc authoring, or QA on finished features. If the
-user says "ok convinced, implement," exit premortem mode and switch to execution.
+and a deduplicated task list for next steps. Skip this skill (proceed normally
+instead) for: straight implementation requests, code review of existing diffs
+(→ `/code-review`), design doc authoring, or QA on finished features. If the user
+says "ok convinced, implement," exit premortem mode and switch to execution.
 
 ## Invocation
 
@@ -74,11 +74,12 @@ decision down to 1 to save time.
 2. **Rate severity:** CRITICAL (likely plan failure or irreversible harm — data loss,
    security breach, broken prod), HIGH (significant impact, needs contingency),
    MEDIUM (manageable but must be tracked).
-3. **Always include a mitigation** — a concrete action, not "be careful."
-4. **Never approve without a concern** — even a solid, simple plan gets its one
+3. **Never approve without a concern** — even a solid, simple plan gets its one
    most-likely failure point named.
-5. **Attack confident assumptions**, not easy strawmen — stress-test what the team
+4. **Attack confident assumptions**, not easy strawmen — stress-test what the team
    treats as settled.
+5. **Do not list actionable tasks here.** Concerns explain risks only. All actions
+   go once into Step 5's task list — never repeat them in the Verdict.
 
 ### Required format per concern
 
@@ -88,7 +89,6 @@ decision down to 1 to save time.
 What the plan assumes: <explicit assumption>
 Why this might be wrong: <specific counter-evidence or failure path>
 What happens if it is: <concrete impact — quantify when possible>
-Mitigation: <specific action before or during implementation>
 ```
 
 Separate concerns with `---`.
@@ -116,48 +116,61 @@ Prefer SQL queries, `curl` calls, or `git grep` over "look at the code."
 Proceed? <Yes with mitigations / No — rethink first / Needs spike>
 
 Strongest assumption to validate first: <one line>
-
-Blocking mitigations (must do before code): <bullets or "none">
-Nice-to-have mitigations: <bullets or "none">
 ```
 
-- **Yes with mitigations** — risks are addressable; blocking items must be done first.
+- **Yes with mitigations** — risks are addressable; blocking items appear in Step 5.
 - **No — rethink first** — a CRITICAL concern has no credible mitigation yet.
 - **Needs spike** — unknowns too large; complete Step 3 spike before any implementation.
 
-### Task splitting rule
+Do **not** output `Blocking mitigations`, `Nice-to-have mitigations`, or task
+skeletons here. The task list in Step 5 is the only place for actions.
 
-If proceeding and the fix touches **3+ independent modules**, do not output one
-monolithic task. Split into 2-4 ordered sub-tasks. Each sub-task after the first
-must start its plan with:
+## Step 5 — Task list (mandatory)
+
+After the Verdict, output **one deduplicated list of tasks**. This is the only
+actionable output — the user reads this to know what to do next.
+
+### Deduplication rules
+
+1. **One task per unique action** — if two concerns imply the same file change,
+   merge into one task.
+2. **No repeats** — do not restate concern text or copy mitigations from an
+   earlier section. Each task appears exactly once.
+3. **Order by urgency** — `до кода` tasks first, then `можно позже`.
+4. **Split large fixes** — if the fix touches 3+ independent modules, output
+   2-4 separate tasks with explicit dependency in the description
+   (`Зависит от: "<title of previous task>"`).
+
+### Required format — one task block at a time (not a table)
+
+Write tasks as numbered blocks, one after another:
 
 ```
-1. Depends on: "<title of previous sub-task>"
+## Список задач
+
+### 1. <short title>
+
+**Важность:** critical | high | medium | low
+**Когда:** до кода | можно позже
+**Описание:** 1-3 sentences — what to do, which file/module/command.
+**Почему:** 1-2 sentences — which risk this addresses and what breaks if skipped.
+
+### 2. <short title>
+
+**Важность:** ...
+**Когда:** ...
+**Описание:** ...
+**Почему:** ...
 ```
 
-### Optional task skeleton (only when Proceed = Yes with mitigations)
+- **Важность** — how bad if this task is skipped (not the concern's severity label).
+- **Когда** — `до кода` = must happen before implementation starts;
+  `можно позже` = safe to defer until after the core fix ships.
+- **Почему** — carries the "why this matters" from concerns; do not duplicate
+  the full concern text.
 
-Check whether the repo has a task-tracking doc with structured fields (e.g. a
-`TECH-LEAD.md`/`PM.md` describing a specialist/complexity/analysis/plan format for
-task cards, as in the ai-dashboard convention). If it does, match that format —
-example shape below. If not, output a plain plan instead: a short title, a few
-sentences of analysis, and numbered steps — no forced fields.
-
-```
-### [Tech Debt] <short title>
-- What's broken: <current pain in one line>
-- Fix direction: <direction, not full implementation>
-- Urgency: critical | high | medium | low
-- Specialist: frontend | backend | fullstack
-- Complexity: simple | medium | complex
-
-**Analysis:**
-2-5 sentences: which files/modules/endpoints, what the spike showed, what must not regress.
-
-**Plan:**
-1. <concrete step>
-2. ...
-```
+If Proceed = No or Needs spike, still output tasks for validation/spike work only
+(usually 1-2 items). If there are zero actionable tasks, say so explicitly.
 
 ## Style notes
 
@@ -180,9 +193,22 @@ risks of the _proposed_ path.
 > response until it expires.
 > What happens if it is: User sees data they should no longer have access to, or stale
 > data they mistake for current — up to 24h of drift.
-> Mitigation: Key the cache by a hash of the token/permission set, not just the
-> endpoint, so a permission change invalidates it immediately.
+
+**Good task (from that concern):**
+
+> ### 1. Key cache by permission set
+>
+> **Важность:** high
+> **Когда:** до кода
+> **Описание:** In `src/api/cache.ts`, key localStorage entries by a hash of the
+> current token/permission set, not just the endpoint URL.
+> **Почему:** Without this, a permission revoke leaves stale authorized data visible
+> for up to 24h (Concern #1).
 
 **Bad concern (reject this style):**
 
 > [MEDIUM] Concern: Caching might cause issues over time.
+
+**Bad output (reject — triple duplication):**
+
+> Mitigation in concern → Blocking mitigations in Verdict → task skeleton with Plan steps

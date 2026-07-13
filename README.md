@@ -1,44 +1,79 @@
 # premortem-llm
 
-Personal skills for AI coding agents (Claude Code, Grok, Cursor, ...). Each
-lives in `skills/<name>/SKILL.md`.
+Personal Codex plugin and skill for AI coding agents. The workflow lives in
+`skills/premortem/SKILL.md`.
 
-## Skills
+## Skill
 
-- **premortem** — pressure-test a decision before committing to it (`/premortem`).
-- **task-analyze** — read a Trello card, save an analysis locally, never post to Trello.
-- **task-propose** — scan the repo for tasks, create only the ones you approve.
-- **task-work** — branch, implement, move the card to testing.
-- **task-qa** — run tests, merge + mark done on green, or move to rework on red.
-
-`task-*` together replace ai-dashboard's role/QA flow for one Trello board —
-no separate app, no comments posted by the AI, every new card needs your
-explicit approval.
+- **premortem** — pressure-test a decision before committing to it. Outputs risks,
+  a verdict, and one deduplicated task list (importance, timing, description, why).
 
 ## Install
 
-```
+Run from a normal terminal (not inside the Codex sandbox — it cannot write to
+`~/.codex` without escalation):
+
+```bash
 ./install.sh
 ```
 
-Symlinks every skill into `~/.claude/skills` and `~/.grok/skills`. Cursor
-doesn't have an equivalent skills folder — copy a `SKILL.md`'s body into
-`.cursor/commands/<name>.md` if you want it there.
+Options:
 
-## Trello setup
-
-```
-TRELLO_KEY=
-TRELLO_TOKEN=
-TRELLO_BOARD_ID=
-TRELLO_BACKLOG_LIST_ID=
-TRELLO_TESTING_LIST_ID=
-TRELLO_DONE_LIST_ID=
-TRELLO_REWORK_LIST_ID=
+```bash
+./install.sh --force       # replace blocking regular files with symlinks
+./install.sh --no-plugin   # symlink skills/prompts only; skip codex plugin
+./install.sh --help
 ```
 
-In a `.env` file per project — never pasted into chat.
+The installer does four things:
+
+1. Symlinks the skill into `.agents/skills` (Codex repo scope when you work
+   inside this repo).
+2. Symlinks the skill into `${CODEX_HOME:-~/.codex}/skills`, `~/.claude/skills`,
+   and `~/.grok/skills`.
+3. Symlinks `commands/premortem.md` into `${CODEX_HOME:-~/.codex}/prompts`.
+   Available as `/prompts:premortem`.
+4. Registers this repo as a local Codex plugin marketplace and installs
+   `premortem-llm@premortem-local` (requires `codex` in PATH or `~/.local/bin`).
+
+Use inside Codex:
+
+```text
+/prompts:premortem cache analytics in a separate table
+```
+
+After install, restart Codex or start a new thread.
+
+### Troubleshooting
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `cp: ~/.codex/skills/premortem: Not a directory` | Skills already installed as symlinks | Nothing to do; run `ls -la ~/.codex/skills` |
+| `Skipped ... (exists and is not a symlink)` | Old regular file blocks the symlink | `./install.sh --force` |
+| `codex CLI not found` | `codex` not in PATH when script runs | Run from terminal where `which codex` works, or `./install.sh --no-plugin` |
+| Skill command missing in Codex after install | Session started before install, or invoked without `prompts:` prefix | Restart Codex or open a new thread, then use `/prompts:premortem` |
+| Skills missing in Codex after install | Session started before install | Restart Codex or open a new thread |
+| Skill name looks like `premortem-llm:premortem` | Plugin namespace | Normal for plugin skills; user skills in `~/.codex/skills` appear without prefix |
+
+Verify:
+
+```bash
+ls -la ~/.codex/skills/premortem ~/.codex/prompts/premortem.md .agents/skills/premortem
+codex plugin list | rg premortem
+```
+
+## Plugin files
+
+- `.codex-plugin/plugin.json` — plugin manifest.
+- `.agents/plugins/marketplace.json` — repo-local marketplace that exposes this plugin.
+- `install.sh` — skill symlinks, Codex slash prompt symlinks, and Codex plugin registration/install.
+
+## Archived task skills
+
+Trello `task-*` skills were moved to
+`ai-dashboard/_moved-from-premortem-llm/` — not wired into ai-dashboard, kept
+for storage only.
 
 ## Commits
 
-No `Co-Authored-By: Claude` (or any AI) trailer.
+No `Co-Authored-By: Claude` or other AI trailer.

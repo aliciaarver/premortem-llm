@@ -1,0 +1,20 @@
+{
+  "name": "premortem-local",
+  "interface": {
+    "displayName": "Premortem Local"
+  },
+  "plugins": [
+    {
+      "name": "premortem-llm",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
