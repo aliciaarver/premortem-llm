@@ -1,0 +1,3 @@
+interface:
+  display_name: "Do Task"
+  short_description: "Implement one task from the tasks folder or from plain text"

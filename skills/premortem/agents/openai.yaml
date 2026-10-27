@@ -1,3 +1,0 @@
-interface:
-  display_name: "Premortem"
-  short_description: "Pressure-test a decision before you commit, on demand"

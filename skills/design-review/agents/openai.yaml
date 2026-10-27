@@ -1,0 +1,3 @@
+interface:
+  display_name: "Design Review"
+  short_description: "Screenshot-based design critique that writes tasks as markdown files"

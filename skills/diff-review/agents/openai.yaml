@@ -1,0 +1,3 @@
+interface:
+  display_name: "Diff Review"
+  short_description: "Strict read-only review of uncommitted changes or one commit"

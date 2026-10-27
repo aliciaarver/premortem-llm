@@ -1,0 +1,3 @@
+interface:
+  display_name: "Tech Review"
+  short_description: "Tech-lead audit that writes tasks as markdown files"

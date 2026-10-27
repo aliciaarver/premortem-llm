@@ -1,25 +1,32 @@
 {
   "name": "premortem-llm",
   "version": "0.1.0+codex.20260707220534",
-  "description": "Personal Codex workflow for premortems before implementation.",
+  "description": "Personal Codex workflows: diff review; tech-lead, product and design reviews that write tasks to markdown files; commands that implement those tasks and QA them.",
   "author": {
     "name": "Alicia"
   },
   "keywords": [
-    "premortem"
+    "code-review",
+    "tech-debt",
+    "product",
+    "design",
+    "tasks",
+    "qa"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Premortem LLM",
-    "shortDescription": "Pressure-test a decision before you commit.",
-    "longDescription": "Codex skill for adversarial review of proposed plans and decisions, with a deduplicated task list for next steps.",
+    "displayName": "Review LLM",
+    "shortDescription": "Review the project, write tasks to files, implement and QA them.",
+    "longDescription": "Codex skills for strict diff review (diff-review); tech-lead, product and screenshot-based design reviews that write tasks as markdown files (tech-review, pm-review, design-review); adding tasks from any tracker by pasting text and images (add-task); implementing a task (do-task); and QA that tests a finished task (qa-task). Commits and pushes only if the project allows it.",
     "developerName": "Alicia",
     "category": "Productivity",
     "capabilities": [
       "Interactive"
     ],
     "defaultPrompt": [
-      "Run a premortem on this plan."
+      "Review the current branch diff.",
+      "Run a tech review of this project.",
+      "Do the most urgent task."
     ]
   }
 }

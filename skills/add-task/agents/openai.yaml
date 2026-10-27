@@ -1,0 +1,3 @@
+interface:
+  display_name: "Add Task"
+  short_description: "Turn pasted task text and images into a task file"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "PM Review"
+  short_description: "Product review that writes user-facing tasks as markdown files"

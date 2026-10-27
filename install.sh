@@ -233,7 +233,7 @@ if [ "$plugin_status" = "failed (codex CLI not found in PATH or ~/.local/bin)" ]
   echo "Add codex to PATH (often ~/.local/bin) or rerun with --no-plugin."
 elif [ "$plugin_status" != "skipped (--no-plugin)" ]; then
   echo "Restart Codex or start a new thread to pick up skill command wrappers."
-  echo "Skill command wrappers are invoked as /prompts:<name>, for example /prompts:premortem."
+  echo "Skill command wrappers are invoked as /prompts:<name>, for example /prompts:tech-review."
   echo "Plugin skills appear as premortem-llm:<name>; user skills appear as <name>."
 fi
 
