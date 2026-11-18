@@ -56,15 +56,18 @@ five ordered tasks in this form:
 
 ```text
 1. [P0 | P1 | P2] Короткое действие.
-   Готово, когда: проверяемый результат.
+   Суть: что именно нужно изменить.
+   Зачем: какая пользовательская, продуктовая или техническая проблема исчезнет; почему задача нужна сейчас.
    Где: подтверждённый файл, экран или API; если это ещё не установлено — «уточнить при реализации».
+   Готово, когда: проверяемый результат.
 ```
 
 `P0` blocks the stated next step, `P1` should be done soon after it, and `P2` is a
 useful improvement. Do not turn every observation into a task: include only work
-that changes the recommendation or meaningfully improves the result. Do not invent
-file paths, acceptance criteria, or implementation details beyond the evidence. If
-no work is needed, write `Что нужно сделать: задач нет`.
+that changes the recommendation or meaningfully improves the result. `Зачем` must
+make the consequence of skipping the task clear, so the user can decide whether it
+is worth doing. Do not invent file paths, acceptance criteria, or implementation
+details beyond the evidence. If no work is needed, write `Что нужно сделать: задач нет`.
 
 Give at most three alternatives and explain the trade-off only when it affects the
 recommendation. If the question is too ambiguous to choose a direction, ask one
