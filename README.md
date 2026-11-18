@@ -33,6 +33,11 @@ Workflows live in `skills/<name>/SKILL.md`.
   pushes only if allowed (see below).
   `/do-task <text>` does the text as the task with no task file — nothing is stored
   in the project (for work repos).
+- **do-commit** — inspects the current diff and writes one clear commit message.
+  `/do-commit` and `/do-commit eng` use English; `/do-commit ru` uses Russian.
+  With `AI_GIT_COMMIT=false` it only proposes a ready-to-copy message. With
+  `AI_GIT_COMMIT=true` it stages the current change set and creates one local commit;
+  it never pushes or commits directly to `main` / `master`.
 - **add-task** — turns a task from any tracker or chat into a task file: paste the
   text, drag in image files (copied into `attachments/T-NNN/`); images pasted into
   the chat are described in text. Looks at the code to fill in where and how, keeps
@@ -47,7 +52,7 @@ Workflows live in `skills/<name>/SKILL.md`.
 
 All commands have the same name everywhere: `/<name>` in Claude Code and Grok,
 `/prompts:<name>` in Codex — `diff-review`, `tech-review`, `pm-review`,
-`design-review`, `add-task`, `do-task`, `qa-task`.
+`design-review`, `add-task`, `do-task`, `do-commit`, `qa-task`.
 
 Typical loop: `tech-review` / `pm-review` / `design-review` (or `add-task` from your
 tracker) → tasks in the folder →
@@ -183,6 +188,7 @@ Use inside Codex:
 ```text
 /prompts:diff-review
 /prompts:tech-review backend/
+/prompts:do-commit ru
 ```
 
 After install, restart Codex or start a new thread.

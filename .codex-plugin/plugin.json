@@ -1,6 +1,6 @@
 {
   "name": "premortem-llm",
-  "version": "0.1.0+codex.20260707220534",
+  "version": "0.1.0+codex.20261118220100",
   "description": "Personal Codex workflows: diff review; tech-lead, product and design reviews that write tasks to markdown files; commands that implement those tasks and QA them.",
   "author": {
     "name": "Alicia"
