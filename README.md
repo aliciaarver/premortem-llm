@@ -45,7 +45,9 @@ Workflows live in `skills/<name>/SKILL.md`.
   behavior it starts with a focused check of the screen, component, state/API and a
   comparable implementation, expanding only when a material question remains. Every
   response ends with **Итог**, **Рекомендация**, **Почему**, **Что проверено**,
-  **Что остаётся неизвестным** and **Следующий шаг**. It does not implement changes.
+  **Что остаётся неизвестным** and **Следующий шаг**. When work is needed, it also
+  gives a prioritised task list with a verifiable «готово, когда» criterion. It does
+  not implement changes.
 - **add-task** — turns a task from any tracker or chat into a task file: paste the
   text, drag in image files (copied into `attachments/T-NNN/`); images pasted into
   the chat are described in text. Looks at the code to fill in where and how, keeps

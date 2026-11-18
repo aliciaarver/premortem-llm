@@ -1,9 +1,9 @@
 ---
 name: analyze
 description: >
-  Assess an idea, proposed feature, or existing-product improvement and end with
-  a clear recommendation and next step. Use only when the user explicitly runs
-  /analyze.
+  Assess an idea, proposed feature, or existing-product improvement and turn
+  required follow-up work into a clear task list. Use only when the user
+  explicitly runs /analyze.
 metadata:
   short-description: "Reach a clear decision with focused research"
 ---
@@ -38,16 +38,33 @@ feature exists without checking when the question is about the current product.
 
 ## Answer format
 
-Start with the conclusion. Keep the normal response within roughly 350 words.
+Start with the conclusion. Keep the normal response within roughly 400 words.
 
 ```text
 Итог: делать / не делать / делать при условии …
 Рекомендация: конкретный выбранный вариант.
 Почему: 2–4 причины, отмечая подтверждённые факты и допущения.
+Что нужно сделать: конкретные задачи перед рекомендованным следующим шагом.
 Что проверено: файлы, экран, API — или «код не проверялся: не нужен для решения».
 Что остаётся неизвестным: только пункты, способные изменить решение.
 Следующий шаг: одно конкретное действие.
 ```
+
+If the conclusion contains a condition, blocker, risk that must be fixed, or a
+recommendation to improve something, `Что нужно сделать` is mandatory. Write up to
+five ordered tasks in this form:
+
+```text
+1. [P0 | P1 | P2] Короткое действие.
+   Готово, когда: проверяемый результат.
+   Где: подтверждённый файл, экран или API; если это ещё не установлено — «уточнить при реализации».
+```
+
+`P0` blocks the stated next step, `P1` should be done soon after it, and `P2` is a
+useful improvement. Do not turn every observation into a task: include only work
+that changes the recommendation or meaningfully improves the result. Do not invent
+file paths, acceptance criteria, or implementation details beyond the evidence. If
+no work is needed, write `Что нужно сделать: задач нет`.
 
 Give at most three alternatives and explain the trade-off only when it affects the
 recommendation. If the question is too ambiguous to choose a direction, ask one
