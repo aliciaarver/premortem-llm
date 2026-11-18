@@ -36,8 +36,16 @@ Workflows live in `skills/<name>/SKILL.md`.
 - **do-commit** — inspects the current diff and writes one clear commit message.
   `/do-commit` and `/do-commit eng` use English; `/do-commit ru` uses Russian.
   With `AI_GIT_COMMIT=false` it only proposes a ready-to-copy message. With
-  `AI_GIT_COMMIT=true` it stages the current change set and creates one local commit;
-  it never pushes or commits directly to `main` / `master`.
+  `AI_GIT_COMMIT=true` it stages the current change set and creates one local commit.
+  With `AI_GIT_PUSH=true` it immediately pushes that commit to the current work
+  branch. Direct commit and push to `main` / `master` require both settings to be
+  `true`.
+- **analyze** — turns an idea, new feature, or improvement to an existing flow into
+  a clear recommendation. It checks no code for abstract questions; for current
+  behavior it starts with a focused check of the screen, component, state/API and a
+  comparable implementation, expanding only when a material question remains. Every
+  response ends with **Итог**, **Рекомендация**, **Почему**, **Что проверено**,
+  **Что остаётся неизвестным** and **Следующий шаг**. It does not implement changes.
 - **add-task** — turns a task from any tracker or chat into a task file: paste the
   text, drag in image files (copied into `attachments/T-NNN/`); images pasted into
   the chat are described in text. Looks at the code to fill in where and how, keeps
@@ -52,7 +60,7 @@ Workflows live in `skills/<name>/SKILL.md`.
 
 All commands have the same name everywhere: `/<name>` in Claude Code and Grok,
 `/prompts:<name>` in Codex — `diff-review`, `tech-review`, `pm-review`,
-`design-review`, `add-task`, `do-task`, `do-commit`, `qa-task`.
+`design-review`, `add-task`, `do-task`, `do-commit`, `analyze`, `qa-task`.
 
 Typical loop: `tech-review` / `pm-review` / `design-review` (or `add-task` from your
 tracker) → tasks in the folder →
@@ -142,6 +150,8 @@ AI_GIT_COAUTHOR=true
 - `AI_GIT_COMMIT=true` — each task on its own branch with a local commit; `qa-task`
   merges it into main locally.
 - `AI_GIT_PUSH=true` — also push (task branches from `do-task`, main after `qa-task`).
+  `/do-commit` immediately pushes its new commit to the current work branch; direct
+  commit and push to `main` / `master` require this setting and `AI_GIT_COMMIT=true`.
   Never force.
 - `AI_GIT_COAUTHOR=true` — commits end with the agent's co-author line
   (`Co-Authored-By: Claude <noreply@anthropic.com>`), so history shows the AI wrote
@@ -189,6 +199,7 @@ Use inside Codex:
 /prompts:diff-review
 /prompts:tech-review backend/
 /prompts:do-commit ru
+/prompts:analyze стоит ли добавлять сохранение фильтров в текущий список заказов
 ```
 
 After install, restart Codex or start a new thread.

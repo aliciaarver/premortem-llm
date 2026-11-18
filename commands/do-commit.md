@@ -1,5 +1,5 @@
 ---
-description: Propose a commit message, or create a commit when the project permits it.
+description: Propose a commit message, or commit and push when the project permits it.
 argument-hint: "[eng | ru]"
 ---
 
